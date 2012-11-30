@@ -3,8 +3,9 @@ class User < ActiveRecord::Base
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :phone, :title, :gender, :office_phone, :agency_attributes, :authentication_tokens, :trip_users, :trips_manageds
   # attr_accessible :title, :body
   attr_accessible :agency_id, :role_id
-  
 
+
+  has_many :logos, :as => :imageable
   belongs_to :agency
 
   belongs_to :role

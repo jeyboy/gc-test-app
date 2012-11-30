@@ -1,4 +1,7 @@
 .cont_right
+  = form_for(:logo, :url => profile_logo_path("%1"), :html => {:method => :put, :id => "crop_form", :remote => true}) do |cf|
+    - [:crop_x, :crop_y, :crop_w, :crop_h].each do |field_name|
+      = cf.hidden_field field_name, :id => field_name
   = form_for(@agency, :url => profile_path, :html => { :method => :put }) do |f|
     .cont
       = render :partial => 'shared/filtered_errors', :locals => {:model => @agency}
@@ -14,24 +17,25 @@
                 %section
                   .left.w317
                     .crop_container
-                      = image_tag("misc/picture_select.png", class: 'target js-jcrop')
+                      = image_tag("misc/picture_select.png", class: 'target js-jcrop', :id => "cropped_image")
                   .photos
                     %ul
                       - @agency.logos.each do |logo|
                         - dimensions = logo.image.capture_size_after_retrieve_from_cache("").map(&:to_i)
                         %li
-                          %a{:href => "#", :"data-url" => logo.image.url, :"data-width" => dimensions[0], :"data-height" => dimensions[1]}
+                          %a.croppable_image{:href => "#", :"data-url" => logo.image.url, :"data-width" => dimensions[0], :"data-height" => dimensions[1], :"data-id" => logo.id}
                             = image_tag(logo.image.thumb.url)
                 %section
                   #file-uploader.left
                     %noscript
                       %p Please enable JavaScript to use file uploader.
                   %ul.buttons
+                    %li= link_to "Crop", "#", :onclick => "$('#crop_form').submit();", :class => "x linkunderline"
                     %li
                       %a.x.linkunderline{:href => "#"} Cancel
                     %li.or Or
                     %li
-                      %a.button.green2{:href => "#"} Save
+                      %a.button.green2{:href => "#", :onclick => "$(this).closest('form').submit();"} Save
             %ul.foobrowse
               %li.first
                 %a{:href => "#"}

@@ -28,10 +28,8 @@ function createUploader() {
 
 function resetJcropImage(image) {
   // FIXME: onImageClick -- destroy Jcrop, change the image, reload Jcrop
-  $img = $('.crop_container img.js-jcrop')
-  $img.src = image.url;
-  $img.width = image.w;
-  $img.height = image.h;
+  $('.crop_container img').prop('src', image.url).css({width: image.w, height: image.h});
+  crop_form.prop('action', crop_form_action.replace("%1", image.id));
 }
 
 function updatePhotosList(image) {
@@ -41,6 +39,7 @@ function updatePhotosList(image) {
 					.attr("data-url", image.url)
 					.attr("data-width", image.w)
 					.attr("data-height", image.h)
+                    .attr("data-id", image.id)
 					.append(img);
 	var li = $("<li></li>").css("display", "none").append(a);
 	$(".photos ul").append(li)
@@ -48,13 +47,17 @@ function updatePhotosList(image) {
 	attachClickToPhotos();
 }
 
+var crop_form = $('#crop_form');
+var crop_form_action = crop_form.prop('action');
+
 function attachClickToPhotos() {
   $(".photos ul li a").unbind('click');
   $(".photos ul li a").bind('click', function(event) {
     var image = new Object();
-    image.url = $(this).attr("data-url");
-    image.w = $(this).attr("data-width");
-    image.h = $(this).attr("data-height");
+    image.url = $(this).data("url");
+    image.w = $(this).data("width");
+    image.h = $(this).data("height");
+    image.id = $(this).data("id");
     resetJcropImage(image);
     event.preventDefault();
   });

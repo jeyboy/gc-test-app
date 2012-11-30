@@ -2,7 +2,7 @@ class Agency < ActiveRecord::Base
   attr_accessible :address, :city, :name, :phone, :state_id, :url, :zip_code, :subdomain, :owner_attributes
   
   has_many :users
-  has_many :logos
+  has_many :logos, :as => :imageable
   has_many :trips
   belongs_to :state
 

@@ -1,7 +1,6 @@
 class Agency::TripsController < Agency::BaseController
   layout 'agency'
 
-
   def update
     @trip = current_agency.trips.find(params[:id])
     done = @trip.update_attributes(params[:trip])   
